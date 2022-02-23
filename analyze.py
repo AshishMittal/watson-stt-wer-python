@@ -207,12 +207,15 @@ class Analyzer:
             if self.config.getBoolean("Transformations", "stemming"):
                 cleaned_ref = [p_stemmer.stem(word) for word in cleaned_ref]
                 cleaned_hyp = [p_stemmer.stem(word) for word in cleaned_hyp]
+            
+            cleaned_ref = " ".join(cleaned_ref[0])
+            cleaned_hyp = " ".join(cleaned_hyp[0])
 
             # gather all metrics at once with `compute_measures`
             measures = jiwer.compute_measures(cleaned_ref, cleaned_hyp)
-            differences = self.compute_differences(cleaned_ref, cleaned_hyp)
+            differences = self.compute_differences(cleaned_ref.split(), cleaned_hyp.split())
 
-            result = AnalysisResult(audio_file_name, reference, hypothesis, " ".join(cleaned_ref), " ".join(cleaned_hyp), measures, differences)
+            result = AnalysisResult(audio_file_name, reference, hypothesis, cleaned_ref, cleaned_hyp, measures, differences)
             results.add(result)
 
         return results
