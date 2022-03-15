@@ -211,6 +211,9 @@ class Analyzer:
             cleaned_ref = " ".join(cleaned_ref[0])
             cleaned_hyp = " ".join(cleaned_hyp[0])
 
+            if len(cleaned_ref) == 0:
+                print("Skipped: {} due to 0 length reference".format(audio_file_name))
+                continue
             # gather all metrics at once with `compute_measures`
             measures = jiwer.compute_measures(cleaned_ref, cleaned_hyp)
             differences = self.compute_differences(cleaned_ref.split(), cleaned_hyp.split())
